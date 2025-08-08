@@ -1,0 +1,10 @@
+fastmcp
+fastapi
+uvicorn
+python-dotenv
+fpdf
+PyPDF2
+httpx
+markdownify
+readabilipy
+beautifulsoup4
