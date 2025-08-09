@@ -72,19 +72,6 @@ async def handle_message(message: str, user_id: str) -> str:
         reset_user_state(user_id)
     return MAIN_MENU
 
-@mcp.tool
-async def server_message(message: str, user_id: str) -> str:
-    if message.strip().lower() == "/mcp message server menu":
-        reset_user_state(user_id)
-        return MAIN_MENU
-    return "Unrecognized server message"
-
-@mcp.tool
-async def handle_message(message: str, user_id: str) -> str:
-    if user_id not in user_state:
-        reset_user_state(user_id)
-    state = user_state[user_id]
-
     if state["stage"] == "menu":
         msg = message.strip()
         if msg == "1":
@@ -181,6 +168,13 @@ async def handle_message(message: str, user_id: str) -> str:
 
     reset_user_state(user_id)
     return f"Something went wrong. Returning to main menu.\n{MAIN_MENU}"
+
+@mcp.tool
+async def server_message(message: str, user_id: str) -> str:
+    if message.strip().lower() == "/mcp message server menu":
+        reset_user_state(user_id)
+        return MAIN_MENU
+    return "Unrecognized server message"
 
 async def main():
     print("🚀 Starting MCP server on http://0.0.0.0:8086")
