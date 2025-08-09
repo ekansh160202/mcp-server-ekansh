@@ -62,14 +62,15 @@ async def menu(user_id: str = None) -> str:
 
 @mcp.tool
 async def handle_message(message: str, user_id: str) -> str:
-    if user_id not in user_state:
-        reset_user_state(user_id)
-    state = user_state[user_id]
-
-    # 🔹 NEW PART: Check if the user asked for the menu in plain text
-    if message.strip().lower() == "send me the menu":
-        reset_user_state(user_id)
+    # Allow plain text trigger here too
+    if message and message.strip().lower() == "send me the menu":
+        if user_id:
+            reset_user_state(user_id)
         return MAIN_MENU
+    
+    if user_id:
+        reset_user_state(user_id)
+    return MAIN_MENU
 
 @mcp.tool
 async def handle_message(message: str, user_id: str) -> str:
