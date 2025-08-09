@@ -16,19 +16,26 @@ MY_NUMBER = os.getenv("MY_NUMBER")
 if TOKEN is None or MY_NUMBER is None:
     raise RuntimeError("Please set AUTH_TOKEN and MY_NUMBER in your .env file.")
 
-# --- Custom authentication function: checks token against AUTH_TOKEN ---
-async def custom_auth(access_token: str):
-    if access_token == TOKEN:
-        return AccessToken(
-            token=access_token,
-            client_id="puch-client",
-            scopes=["*"],
-            expires_at=None,
-        )
-    return None
+from fastmcp.server.auth.providers.bearer import BearerAuthProvider, RSAKeyPair
 
-# Setup FastMCP server
-mcp = FastMCP("UPI & FileConvert & Lens MCP Server", auth=custom_auth)
+class SimpleBearerAuthProvider(BearerAuthProvider):
+    def __init__(self, token: str):
+        k = RSAKeyPair.generate()
+        super().__init__(public_key=k.public_key, jwks_uri=None, issuer=None, audience=None)
+        self.token = token
+
+    async def load_access_token(self, token: str):
+        if token == self.token:
+            return AccessToken(
+                token=token,
+                client_id="puch-client",
+                scopes=["*"],
+                expires_at=None,
+            )
+        return None
+
+auth = SimpleBearerAuthProvider(TOKEN)
+mcp = FastMCP("UPI & FileConvert & Lens MCP Server", auth=auth)
 
 # --- User Session State ---
 user_state = {}
