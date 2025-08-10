@@ -62,6 +62,7 @@ async def menu(user_id: str = None) -> str:
 
 @mcp.tool
 async def handle_message(message: str, user_id: str) -> str:
+    print("handle_message called:", message, user_id)
     if user_id not in user_state:
         reset_user_state(user_id)
     state=user_state[user_id]
