@@ -61,6 +61,11 @@ async def menu(user_id: str = None) -> str:
     return MAIN_MENU
 
 @mcp.tool
+async def about()->dict[str,str]:
+    server_name="MCP Server by Ekansh"
+    server_description=dedent("""This MCP server is designed to convert PDF to docs or txt file, docs or txt file to pdf PDF, perform UPI payment through select UPIs, and to google search a photo's content through the use of google lens.""")
+    return {"name":server_name, "description":server_description}
+@mcp.tool
 async def handle_message(message: str, user_id: str) -> str:
     print("handle_message called:", message, user_id, flush=True)
     if user_id not in user_state:
