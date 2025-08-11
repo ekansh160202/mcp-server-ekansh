@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from fastmcp import FastMCP
 from mcp.server.auth.provider import AccessToken
-
+from pydantic import BaseModel
 from upi_service import generate_upi_link
 from file_conversion_service import create_upload_link as file_create_upload_link
 from image_lens_service import create_upload_link as lens_create_upload_link
@@ -65,7 +65,7 @@ async def about()->dict[str,str]:
     server_name="MCP Server by Ekansh"
     server_description=dedent("""This MCP server is designed to convert PDF to docs or txt file, docs or txt file to pdf PDF, perform UPI payment through select UPIs, and to google search a photo's content through the use of google lens.""")
     return {"name":server_name, "description":server_description}
-@mcp.tool
+@mcp.tool(description=MAIN_MENU.model_dump_json())
 async def handle_message(message: str, user_id: str) -> str:
     print("handle_message called:", message, user_id, flush=True)
     if user_id not in user_state:
